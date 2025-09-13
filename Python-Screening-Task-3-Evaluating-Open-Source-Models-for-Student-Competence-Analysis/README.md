@@ -15,6 +15,7 @@ The research explores open-source AI models such as *CodeT5* and *CodeBERT* for 
 This repository is created for submission to *FOSSEE, IIT Bombay* as part of the *Python Internship Screening Tasks*.  
 
 ---
-✅ Candidate: Shine Suri  
-📌 Semester: 3rd Year (5th Semester not yet completed)  
-📩 Contact Email: [your email here]
+*Name*: Shine Suri  
+*Institution*: GSFC University, Vadodara  
+*Email*: 23bt04155@gsfcuniversity.ac.in
+
