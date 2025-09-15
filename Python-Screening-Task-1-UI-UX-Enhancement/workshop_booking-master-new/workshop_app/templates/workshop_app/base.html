@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load custom_filters %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0d6efd">
+    <title>
+        {% block title %}
+            HomePage
+        {% endblock %}
+    </title>
+
+    
+
+    {% block extra-dependencies %}
+    {% endblock %}
+
+    <link rel="stylesheet" href="{% static 'workshop_app/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'workshop_app/css/toastr.min.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'workshop_app/css/base.css' %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static 'workshop_app/css/font-awesome.css' %}" type="text/css"/>
+    
+    {% block extra-custom-scripts %}
+    {% endblock %}
+
+</head>
+
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+{% block header %}
+    <nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top">
+        <div class="container">
+        <a class="navbar-brand text-white" href="{% url 'workshop_app:index' %}">FOSSEE Workshops</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'workshop_app:index' %}">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'statistics_app:public' %}">
+                        Workshop Statistics
+                    </a>
+                </li>
+            </ul>
+            {% if user.is_authenticated %}
+            <ul class="navbar-nav mr-auto">
+                {% if request.user|has_group:"instructor" %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'statistics_app:team' %}">
+                        Team Statistics
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_status_instructor' %}">
+                        Workshop Status
+                    </a>
+                </li>
+                {% if not request.user|has_group:"instructor" %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{% url 'workshop_app:propose_workshop' %}">
+                            Propose Workshop
+                        </a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{% url 'workshop_app:workshop_type_list' %}">
+                        Workshop Types
+                    </a>
+                </li>
+            </ul>
+            <div class="my-2 my-lg-0">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           <span class="material-icons va-middle">account_circle</span>
+                            <p class="d-inline va-middle">
+                                {{user.get_full_name|title}}
+                            </p>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'workshop_app:view_own_profile' %}">Profile</a>
+                            <a class="dropdown-item" href="{% url 'password_change' %}">
+                                 Change Password
+                            </a>
+                            <a class="dropdown-item" href="{% url 'workshop_app:logout' %}">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    </nav>
+{% endblock %}
+
+<div id="main" class="base-content">
+    {% block content %}
+        <h1>Base Template Content. Please override me</h1>
+    {% endblock %}
+</div>
+
+<script src="{% static 'workshop_app/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'workshop_app/js/popper.min.js' %}"></script>
+    <script src="{% static 'workshop_app/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'workshop_app/js/toastr.min.js' %}"></script>
+
+    <script>
+      // Toastr accessibility and UX options
+      if (typeof toastr !== 'undefined') {
+        toastr.options = {
+          closeButton: true,
+          progressBar: true,
+          newestOnTop: true,
+          preventDuplicates: true,
+          positionClass: 'toast-bottom-center',
+          timeOut: 4000,
+          extendedTimeOut: 2000
+        };
+      }
+      // Wrap wide tables for mobile horizontal scrolling + enhance forms + navbar UX
+      (function() {
+        $(function() {
+          // Responsive tables
+          $('table').each(function() {
+            var $t = $(this);
+            if (!$t.parent().hasClass('table-responsive') && !$t.parent().hasClass('table-wrap')) {
+              $t.wrap('<div class="table-responsive table-wrap"></div>');
+            }
+          });
+
+          // Auto-apply Bootstrap form-control for better mobile usability
+          $('input[type="text"], input[type="password"], input[type="email"], input[type="tel"], input[type="number"], input[type="url"], input[type="search"], select, textarea')
+            .each(function() {
+              var $el = $(this);
+              if (!$el.hasClass('form-control')) { $el.addClass('form-control'); }
+            });
+
+          // Ensure submit buttons are styled
+          $('input[type="submit"], button[type="submit"]').each(function() {
+            var $b = $(this);
+            if (!$b.hasClass('btn')) { $b.addClass('btn'); }
+            if (!/\bbtn-/.test(this.className)) { $b.addClass('btn-primary'); }
+          });
+
+          // Collapse navbar on link click (for mobile)
+          $('.navbar-collapse a:not(.dropdown-toggle), .navbar-brand').on('click', function(){
+            $('.navbar-collapse').collapse('hide');
+          });
+        });
+      })();
+    </script>
+
+<script>
+{% if messages %}
+  {% for message in messages %}
+    (function () {
+      var tag = "{{ message.tags|default:'info'|escapejs }}".trim().split(' ')[0];
+      if (['success','info','warning','error'].indexOf(tag) === -1) tag = 'info';
+      toastr[tag]("{{ message|escapejs }}");
+    })();
+  {% endfor %}
+{% endif %}
+</script>
+
+<footer class="footer">
+    {% block footer %}
+       <div class="container">
+           Developed by FOSSEE group, IIT Bombay
+       </div> 
+    {% endblock %}
+  </footer>
+</body>
+</html>
