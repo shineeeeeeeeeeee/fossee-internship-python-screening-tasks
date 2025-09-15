@@ -1,0 +1,75 @@
+/*
+  Base layout and accessibility enhancements
+*/
+:root {
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+}
+
+html { scroll-behavior: smooth; }
+
+/**
+ * Navbar and stacking context
+ */
+.navbar { z-index: 1000; }
+
+/* Accessible skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #0d6efd;
+  color: #fff;
+  padding: var(--space-2) var(--space-4);
+  z-index: 1100;
+}
+.skip-link:focus { top: 0; }
+
+/* Utility */
+.va-middle { vertical-align: middle; }
+
+/* Footer */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    z-index: 100;
+    padding: var(--space-3) 0;
+}
+
+/* Content wrapper prevents overlap with fixed navbar and footer */
+.base-content {
+    padding-top: 64px;
+    padding-bottom: 88px;
+}
+@media (min-width: 992px) {
+    .base-content { padding-top: 72px; }
+}
+
+/* Improve card readability on mobile */
+.card { border-radius: 0.5rem; }
+.card .card-body { padding: var(--space-5); }
+
+/* Table improvements */
+.table-wrap { margin-bottom: var(--space-5); }
+.table { font-size: 0.95rem; }
+
+/* Form controls sizing for touch */
+.form-control { min-height: 2.75rem; }
+.btn { min-height: 2.75rem; }
+
+/* Focus ring for accessibility */
+:focus { outline: 3px solid rgba(13,110,253,0.4); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
